@@ -1,0 +1,30 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Setiap malam pukul 00:00 UTC
+  workflow_dispatch:  # Allow manual triggering of the workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.115.0'  # Sesuaikan dengan versi yang Anda gunakan
+
+      - name: Build Hugo Site
+        run: hugo
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: 3IZoL8cv8fUZWP9zlb4r0Gbtx60nmoJk0ulUn6TC
+          accountId: a20e917fb1abad3e0865636620e04c90
+          projectName: 'gifideasnow'  # Ganti dengan nama proyek Cloudflare Pages Anda
+          directory: 'public'

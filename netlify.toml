@@ -1,0 +1,31 @@
+name: Deploy Hugo to 2NT FTP
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Menjadwalkan deploy setiap tengah malam
+  workflow_dispatch:       # Opsi untuk menjalankan workflow secara manual
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout kode
+        uses: actions/checkout@v3
+      
+      - name: Instal Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+
+      - name: Build Hugo site
+        run: hugo --minify
+
+      - name: Upload ke FTP 2NT
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: "ftp-server011.web.2nt.com"     # Server FTP 2NT
+          username: "spruchexsc"                  # Username FTP
+          password: "d0!p0#&tlP"                  # Password FTP
+          local-dir: ./public/                    # Folder hasil build Hugo
+          server-dir: /                           # Direktori tujuan di FTP
